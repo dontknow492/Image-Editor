@@ -25,7 +25,7 @@ def main():
 if __name__ == "__main__":
     logger.add(
         "logs/app_{time}.log",  # File name pattern
-        rotation="10 MB",  # Rotate after 10MB
+        rotation="20 MB",  # Rotate after 10MB
         retention="7 days",  # Keep logs for 7 days
         compression="zip",  # Compress old logs with zip
         enqueue=True,  # Better for multithreaded apps
