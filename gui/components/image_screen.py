@@ -32,10 +32,12 @@ class ImageScreen(QGraphicsView):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.orientation = None
         self.move_offset = None
         self.dragging = False
         self.moving = False
         self.is_cropping = False
+        self.rotate_angle = 0
         self.history = list()
         self.is_image_adjusted = None
         self.is_image_filtered = False
@@ -463,14 +465,22 @@ class ImageScreen(QGraphicsView):
 
     def rotate_flip(self, angle):
         """Rotate the scene by the given angle."""
+        self.rotate_angle = angle
         self.rotate(angle)
+
+    def get_rotation_angle(self):
+        return self.rotate_angle
         # Update scene rect
 
     def flip_view(self, orientation: Qt.Orientation):
+        self.orientation =  orientation
         if orientation == Qt.Orientation.Horizontal:
             self.scale(-1, 1)  # Flip horizontally
         elif orientation == Qt.Orientation.Vertical:
             self.scale(1, -1)
+
+    def get_orientation(self):
+        return self.orientation
 
     def reset_transformation(self):
         self.resetTransform()
@@ -583,6 +593,8 @@ class ImageScreen(QGraphicsView):
         self.scene.removeItem(self.crop_rect_item)
         self.scene.removeItem(self.crop_rect_overlay)
         self.image_item.setPixmap(QPixmap())
+        self.rotate_angle = 0
+        self.orientation = None
         self.is_image_filtered = False
         self.is_image_adjusted = False
         self.current_filter = None
